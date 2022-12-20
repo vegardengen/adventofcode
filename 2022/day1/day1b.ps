@@ -17,6 +17,7 @@
 /max [ 0 0 0 ] def
 /sum 0 def
 /ant 3 def
+100 450 moveto
 { 
   infile buff readline /notfinished exch def /number exch def 
   notfinished { 
@@ -26,12 +27,16 @@
        /ind 0 def
        {
          sum max ind get gt {
-           sum max ind 1 add get gt {
-             max ind max ind 1 add get put
+           ind ant 1 sub lt { 
+	     sum max ind 1 add get gt {
+               max ind max ind 1 add get put
+	     } {
+               max ind sum put exit
+             } ifelse
            } {
              max ind sum put exit
            } ifelse
-           ind ant 2 sub lt {
+           ind ant 1 sub lt {
              /ind ind 1 add def
            } {
              max ind sum put
@@ -47,5 +52,8 @@
      exit 
   } ifelse
 } loop
-100 100 moveto 0 1 ant 1 sub { max exch get 10 string cvs show  ( - ) show } for
+/tot 0 def
+0 1 ant 1 sub { max exch get /tot exch tot add def } for
+100 100 moveto tot 10 string cvs show
+100 120 moveto 0 1 ant 1 sub { max exch get 10 string cvs show ( - ) show } for
 showpage
