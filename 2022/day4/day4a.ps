@@ -1,0 +1,26 @@
+%!PS
+
+/Helvetica findfont 10 scalefont setfont
+/infile (input.txt) (r) file def
+/buff 128 string def
+/notfinished true def
+/num 0 def
+100 750 moveto
+/l 0 def
+/i 0 def
+{ 
+  infile buff readline /notfinished exch def /line exch def 
+  notfinished { 
+    line (,) search { /Elf1 exch def pop /Elf2 exch def } if
+    Elf2 (-) search { /Elf2b exch cvi def pop /Elf2e exch cvi def } if
+    Elf1 (-) search { /Elf1b exch  cvi def pop /Elf1e exch cvi def } if
+    Elf1b Elf2b ge Elf1e Elf2e le and Elf2b Elf1b ge Elf2e Elf1e le and or { 
+    /i i 1 add def
+    i 8 gt { /i 0 def /l l 15 add def 100 750 l sub moveto } if
+    /num num 1 add def } if
+  } { 
+    exit
+  } ifelse
+} loop
+100 100 moveto num 10 string cvs show
+showpage
