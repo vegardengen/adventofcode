@@ -1,0 +1,70 @@
+%!PS
+/split {              % str del
+    [ 3 1 roll        % [ str del
+    {                 % [ ... str del
+        search {      % [ ... post match pre
+            3 1 roll   % [ ... pre post match  %ie. [ ... pre str' del
+        }{            % [ ... str
+            exit       % [ ... str  %% break-from-loop
+        }ifelse
+    }loop             % [ ...
+    ]                 % [ ... ]
+} def
+
+
+/Helvetica findfont 10 scalefont setfont
+/infile (input.txt) (r) file def
+/buff 128 string def
+/notfinished true def
+/TotalscoreA 0 def
+/TotalscoreB 0 def
+/Round 0 def
+/groupind 0 def
+100 250 moveto
+{ 
+  infile buff readline /notfinished exch def /line exch def 
+  notfinished { 
+     /groupind groupind 1 add def
+     /compartmentsize line length 2 div cvi def
+     /comp1 line 0 compartmentsize getinterval def
+     /comp2 line compartmentsize compartmentsize getinterval def
+     0 1 compartmentsize 1 sub {
+       comp1 exch 1 getinterval comp2 exch search { pop /common exch def pop } { pop } ifelse
+     } for
+       common 0 get 96 gt { /score common 0 get 96 sub def } { /score common 0 get 64 sub 26 add def } ifelse
+       /TotalscoreA TotalscoreA score add def
+
+     groupind 1 eq { line length /string1 exch string def line string1 copy pop } if
+     groupind 2 eq { line length /string2 exch string def line string2 copy pop } if
+     groupind 3 eq { line length /string3 exch string def line string3 copy pop /groupind 0 def 
+     0 1 string1 length 1 sub { 
+       /ind exch def
+       string1 ind 1 getinterval
+       string2 exch search { 
+         pop pop pop true 
+       } { 
+          pop false 
+       } ifelse 
+       /string2found exch def
+       string1 ind 1 getinterval
+       string3 exch search {
+         pop pop pop true 
+       } {
+         pop false
+       } ifelse
+       /string3found exch def
+       string2found string3found and { 
+         /commonchar string1 ind 1 getinterval def 
+       } if
+     } for
+     commonchar show (-) show string1 show (-) show
+     commonchar 0 get 96 gt { /score commonchar 0 get 96 sub def } { /score commonchar 0 get 64 sub 26 add def } ifelse
+     /TotalscoreB TotalscoreB score add def
+   } if
+  } { 
+    exit
+  } ifelse
+} loop
+100 200 moveto (A: ) show TotalscoreA 10 string cvs show (B: ) show TotalscoreB 10 string cvs show
+100 150 moveto 
+showpage
