@@ -57,7 +57,6 @@
          /commonchar string1 ind 1 getinterval def 
        } if
      } for
-     commonchar show (-) show string1 show (-) show
      commonchar 0 get 96 gt { /score commonchar 0 get 96 sub def } { /score commonchar 0 get 64 sub 26 add def } ifelse
      /TotalscoreB TotalscoreB score add def
    } if
@@ -65,6 +64,6 @@
     exit
   } ifelse
 } loop
-100 200 moveto (A: ) show TotalscoreA 10 string cvs show (B: ) show TotalscoreB 10 string cvs show
+100 200 moveto (A: ) show TotalscoreA 10 string cvs show ( B: ) show TotalscoreB 10 string cvs show
 100 150 moveto 
 showpage
