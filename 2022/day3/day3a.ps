@@ -1,16 +1,4 @@
 %!PS
-/split {              % str del
-    [ 3 1 roll        % [ str del
-    {                 % [ ... str del
-        search {      % [ ... post match pre
-            3 1 roll   % [ ... pre post match  %ie. [ ... pre str' del
-        }{            % [ ... str
-            exit       % [ ... str  %% break-from-loop
-        }ifelse
-    }loop             % [ ...
-    ]                 % [ ... ]
-} def
-
 
 /Helvetica findfont 10 scalefont setfont
 /infile (input.txt) (r) file def
