@@ -1,0 +1,42 @@
+%!PS
+/split {              % str del
+    [ 3 1 roll        % [ str del
+    {                 % [ ... str del
+        search {      % [ ... post match pre
+            3 1 roll   % [ ... pre post match  %ie. [ ... pre str' del
+        }{            % [ ... str
+            exit       % [ ... str  %% break-from-loop
+        }ifelse
+    }loop             % [ ...
+    ]                 % [ ... ]
+} def
+
+
+/Helvetica findfont 10 scalefont setfont
+/infile (input.txt) (r) file def
+/buff 128 string def
+/notfinished true def
+/Totalscore 0 def
+     100 100 moveto
+/Round 0 def
+{ 
+  infile buff readline /notfinished exch def /line exch def 
+   notfinished { 
+    /Competition line ( ) split def
+     /They Competition 0 get def /Me Competition 1 get def
+     /Score 0 def
+     Me (X) eq { /Score 1 def } if
+     Me (Y) eq { /Score 2 def } if
+     Me (Z) eq { /Score 3 def } if
+     Me (X) eq They (A) eq and { /Score Score 3 add def } if
+     Me (Y) eq They (B) eq and { /Score Score 3 add def } if
+     Me (Z) eq They (C) eq and { /Score Score 3 add def } if
+     Me (X) eq They (C) eq and { /Score Score 6 add def } if
+     Me (Y) eq They (A) eq and { /Score Score 6 add def } if
+     Me (Z) eq They (B) eq and { /Score Score 6 add def } if
+     /Totalscore Totalscore Score add def
+     /Round Round 1 add def
+  } { exit } ifelse
+} loop
+Totalscore 10 string cvs show (-) show Round 10 string cvs show
+showpage
