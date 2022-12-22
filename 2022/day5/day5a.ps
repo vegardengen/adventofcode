@@ -5,10 +5,6 @@
 /infile (input.txt) (r) file def
 /buff 128 string def
 /notfinished true def
-/num 0 def
-100 750 moveto
-/l 0 def
-/i 0 def
 /stack 9 array def
 0 1 8 {
   stack exch 100 array put
@@ -17,31 +13,59 @@
 0 1 8 {
   stackp exch 0 put
 } for
+/stackpop {
+  /ind exch def
+  stack ind get
+  stackp ind get
+  get
+  stack ind get
+  stackp ind get null put
+  stackp ind stackp ind get 1 sub put
+} def
+
+/stackpush {
+  /element exch def
+  /ind exch def
+  stack ind get
+  stackp ind get 1 add
+  element
+  put
+  stackp ind stackp ind get 1 add put
+} def
+
+
 /fillbuckets true def
 /elems [ 1 5 9 13 17 21 25 29 33 ] def
+/n 7 def
 { 
   infile buff readline /notfinished exch def /line exch def 
   notfinished { 
     fillbuckets {
         line 1 1 getinterval (1) eq { /fillbuckets false def } if
         /i 0 def
-        elems {
-          dup
-          line exch 1 getinterval dup ( ) ne { 
-              stack i get exch stackp i get exch put stackp i stackp i get 1 add put
-          } { pop /fillbuckets false def } ifelse
-        } forall
+        fillbuckets { elems {
+          line exch 1 getinterval 1 string copy dup ( ) ne { 
+              stack i get exch n exch put 
+	      stack i get n 1 add get null eq { stackp i n put } { } ifelse
+          } { pop } ifelse
+	  /i i 1 add def
+        } forall } if
+	/n n 1 sub def
     } {
       line length 0 ne {
-        /ant line 5 2 getinterval cvi def
-        /from line 12 2 getinterval cvi def
-        /to line 17 2 getinterval cvi def
-        ant 2 string cvs show (-) show from 2 string cvs show (-) show to 2 string cvs show
+	/words 6 array def
+	0 1 5 { /n exch def line ( ) search { words exch n exch put pop /line exch def } { words exch n exch put } ifelse } for
+	/ant words 1 get cvi def
+	/from words 3 get cvi 1 sub def
+	/to words 5 get cvi 1 sub def
+	1 1 ant { pop from stackpop to exch stackpush } for
       } if
     } ifelse
   } { 
     exit
   } ifelse
 } loop
-100 100 moveto num 10 string cvs show
+100 100 moveto
+0 1 8 {
+  /ind exch def stack ind get stackp ind get get show } for
 showpage
