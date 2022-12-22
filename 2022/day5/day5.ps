@@ -33,6 +33,20 @@
   stackp ind stackp ind get 1 add put
 } def
 
+/stackmoveA {
+  /to exch def
+  /from exch def
+  /ant exch def
+  1 1 ant { pop from stackpop to exch stackpush } for
+} def
+
+/stackmoveB {
+ /to exch def
+ /from exch def
+ /ant exch def
+ 1 1 ant { pop from stackpop } for
+ 1 1 ant { pop to exch stackpush } for
+} def
 
 /fillbuckets true def
 /elems [ 1 5 9 13 17 21 25 29 33 ] def
@@ -58,7 +72,7 @@
 	/ant words 1 get cvi def
 	/from words 3 get cvi 1 sub def
 	/to words 5 get cvi 1 sub def
-	1 1 ant { pop from stackpop to exch stackpush } for
+	ant from to stackmoveB
       } if
     } ifelse
   } { 
