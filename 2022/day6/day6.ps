@@ -1,0 +1,48 @@
+%!PS
+
+  
+/infile (input.txt) (r) file def
+/notfinished true def
+/buff 100000 string def
+
+/isdifferent {
+  /number exch def
+  /end exch def
+  /start end number 1 sub sub def
+  /result true def
+  start 1 end {
+    /x exch def
+    x 1 add 1 end {
+      /y exch def
+      line x 1 getinterval line y 1 getinterval
+      ne /result exch result and def
+    } for
+  } for
+  result 
+} def
+
+/i 0 def
+   
+   
+  infile buff readline /notfinished exch def /line  exch def 
+  /startofpacket 0 def
+  notfinished { 
+    
+    /i 3 def
+    {
+       i 4 isdifferent
+       not { i line length ne { /i i 1 add def } { exit } ifelse } { /startofpacket i def /i i 1 add def exit } ifelse
+    } loop
+    /i startofpacket def
+    {
+       i 14 isdifferent
+       not { i line length ne { /i i 1 add def } { exit } ifelse } { /startofmessage i def /i i 1 add def exit } ifelse
+    } loop
+   
+   
+  } { 
+  } ifelse
+
+(Start of packet:) print startofpacket 1 add 5 string cvs print
+(   Start of message:) print startofmessage 1 add 5 string cvs print
+(\n) print
