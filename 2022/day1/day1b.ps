@@ -54,6 +54,5 @@
 } loop
 /tot 0 def
 0 1 ant 1 sub { max exch get /tot exch tot add def } for
-100 100 moveto tot 10 string cvs show
-100 120 moveto 0 1 ant 1 sub { max exch get 10 string cvs show ( - ) show } for
-showpage
+tot 10 string cvs print
+0 1 ant 1 sub { max exch get 10 string cvs show ( - ) print } for
